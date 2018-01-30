@@ -1,11 +1,11 @@
 ---
-- name: Download activemq package
+- name: Download vault package
   get_url:
     url: https://releases.hashicorp.com/vault/0.6.2/vault_0.6.2_linux_amd64.zip
     dest: "{{ package_dest }}"
   ignore_errors: yes
 
-- name: Installing apache2 ...
+- name: Installing unzip ...
   apt: name=unzip state=installed
 
 - name: Recursively decompress GZ files in ApplicationLogs.zip
@@ -13,7 +13,6 @@
     src: "{{ package_dest }}/vault_0.6.2_linux_amd64.zip"
     dest: "{{ vault_dest }}"
     remote_src: yes
- #   delete_archive: yes
 
 - name: move valut into usr/local/bin directory
   command: mv "{{ vault_dest }}/vault"  /usr/local/bin
@@ -21,10 +20,6 @@
 - name: run the testing environmet
   shell: vault server -dev &
 
-#- name: source the .bashrc file
-#    shell: source ~/.bashrc && export VAULT_ADDR="http://{{ vault_server_ip }}:8200"
-#    args:
-#      executables: "/bin/bash"
 - name: Update sshd file
   lineinfile:
     path: ~/.bashrc
@@ -33,5 +28,5 @@
   tags: bash
 
 - name: source bashrc
-  shell: source ~/.bashrc
+  command: export VAULT_ADDR="http://{{ vault_server_ip }}:8200"
 

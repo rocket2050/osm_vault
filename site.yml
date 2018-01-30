@@ -1,5 +1,5 @@
 ---
 
-- host: vault
+- hosts: vault
   roles:
     -  osm_vault
