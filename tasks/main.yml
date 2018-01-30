@@ -17,8 +17,8 @@
 - name: move valut into usr/local/bin directory
   command: mv "{{ vault_dest }}/vault"  /usr/local/bin
 
-- name: run the testing environmet
-  shell: vault server -dev &
+#- name: run the testing environmet
+#  shell: vault server -dev &
 
 - name: Update bashrc file.....
   lineinfile:
@@ -30,8 +30,17 @@
 - name: Adding catalina configuration file ...
   template: src=vault.sh.j2 dest=/root/vault.sh mode=0755
 
+- name: Adding catalina configuration file ...
+  template: src=vault.service.j2 dest=/etc/systemd/system/vault.service 
+
+- name: just force systemd to reread configs (2.4 and above)
+  command: systemctl daemon-reload
+
+- service:
+    name: vault
+    state: started
+
 - name: execute the script
   shell: bash /root/vault.sh
-#- name: export vault address....
-#  command: export VAULT_ADDR="http://{{ vault_server_ip }}:8200"
+  tags: bash
 
