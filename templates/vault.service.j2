@@ -1,9 +1,9 @@
 [Unit]
-Description=Consul
+Description=Vault
 Documentation=https://www.consul.io/
 
 [Service]
-ExecStart=/usr/local/bin/vault server -dev
+ExecStart=/usr/local/bin/vault server -config /etc/vault.d/config.hcl
 ExecReload=/bin/kill -HUP $MAINPID
 LimitNOFILE=65536
 

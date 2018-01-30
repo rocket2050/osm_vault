@@ -2,5 +2,5 @@
 # vars file for vault
 package_dest: "/tmp"
 vault_dest: "/opt"
-vault_server_ip: "127.0.0.1"
+vault_server_ip: "192.168.2.16"
 

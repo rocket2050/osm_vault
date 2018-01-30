@@ -1,7 +1,7 @@
 ---
 - name: Download vault package
   get_url:
-    url: https://releases.hashicorp.com/vault/0.6.2/vault_0.6.2_linux_amd64.zip
+    url: https://releases.hashicorp.com/vault/0.9.3/vault_0.9.3_linux_amd64.zip
     dest: "{{ package_dest }}"
   ignore_errors: yes
 
@@ -10,7 +10,7 @@
 
 - name: Recursively decompress GZ files in ApplicationLogs.zip
   unarchive:
-    src: "{{ package_dest }}/vault_0.6.2_linux_amd64.zip"
+    src: "{{ package_dest }}/vault_0.9.3_linux_amd64.zip"
     dest: "{{ vault_dest }}"
     remote_src: yes
 
@@ -30,6 +30,16 @@
 - name: Adding catalina configuration file ...
   template: src=vault.sh.j2 dest=/root/vault.sh mode=0755
 
+- name: To create config directory
+  file:
+    path: /etc/vault.d/
+    state: directory
+
+- name: To copy config file
+  template:
+    src: config.hcl.j2
+    dest: /etc/vault.d/config.hcl
+
 - name: Adding catalina configuration file ...
   template: src=vault.service.j2 dest=/etc/systemd/system/vault.service 
 
@@ -44,3 +54,7 @@
   shell: bash /root/vault.sh
   tags: bash
 
+- name: Execute command vault init
+  template: src=vault_init.sh.j2 dest=/root/vault_init.sh mode=0755
+  tags:
+    - red
