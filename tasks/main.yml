@@ -20,13 +20,18 @@
 - name: run the testing environmet
   shell: vault server -dev &
 
-- name: Update sshd file
+- name: Update bashrc file.....
   lineinfile:
     path: ~/.bashrc
     line: export VAULT_ADDR="http://{{ vault_server_ip }}:8200"
     insertafter: EOF
   tags: bash
 
-- name: source bashrc
-  command: export VAULT_ADDR="http://{{ vault_server_ip }}:8200"
+- name: Adding catalina configuration file ...
+  template: src=vault.sh.j2 dest=/root/vault.sh mode=0755
+
+- name: execute the script
+  shell: bash /root/vault.sh
+#- name: export vault address....
+#  command: export VAULT_ADDR="http://{{ vault_server_ip }}:8200"
 
